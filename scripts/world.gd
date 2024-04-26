@@ -133,6 +133,8 @@ func check_neighbors(grid: Array, rules, picked_tile_coords, grid_size, draw_col
 						rules[possibility]["weight"] += neighbor_rules[possibility]
 				for remove in to_remove:
 					if picked_tile.size() < 2:
+						scramble_neighbors(grid, rules, grid_size, picked_tile_coords, draw_collapsed)
+						print("scrambled start!")
 						break
 					picked_tile.erase(remove)
 				if picked_tile.size() == 1:
@@ -172,20 +174,25 @@ func update_neighbors(grid, rules, grid_size, picked_tile_coords, draw_collapsed
 						to_remove.append(possibility)
 				for remove in to_remove:
 					if neighbor.size() < 2:
-						scramnle_neighbors(grid, rules, grid_size, neighbor_coords)
+						scramble_neighbors(grid, rules, grid_size, neighbor_coords, draw_collapsed)
 						print("scrambled!")
-						break
+						return
 					neighbor.erase(remove)
 				if neighbor.size() == 1:
 					update_neighbors(grid, rules, grid_size, neighbor_coords, draw_collapsed)
 					if draw_collapsed:
 						tile_map.set_cell(0, neighbor_coords, 0, str_to_var(neighbor[0]))
 
-func scramnle_neighbors(grid, rules, grid_size, coords):
-	for dir in [Vector2i(1, 0), Vector2i(-1, 0), Vector2i(0, -1), Vector2i(0, 1)]:
-		var normal_neighbor_coords = coords + dir
-		var neighbor_coords = normal_neighbor_coords.clamp(Vector2i(0, 0), Vector2i(grid_size.x - 1, grid_size.y - 1))
-		if neighbor_coords == normal_neighbor_coords:
-			var neighbor = grid[neighbor_coords.x][neighbor_coords.y]
-			neighbor = rules.keys()
+func scramble_neighbors(grid, rules, grid_size, coords, draw_collapsed):
+	for x in range(-5, 5):
+		for y in range(-5, 5):
+			var dir = Vector2i(x, y)
+			var normal_neighbor_coords = coords + dir
+			var neighbor_coords = normal_neighbor_coords.clamp(Vector2i(0, 0), Vector2i(grid_size.x - 1, grid_size.y - 1))
+			if neighbor_coords == normal_neighbor_coords:
+				grid[neighbor_coords.x][neighbor_coords.y]= rules.keys()
+				if draw_collapsed:
+					tile_map.set_cell(0, neighbor_coords)
 	grid[coords.x][coords.y] = rules.keys()
+	if draw_collapsed:
+		tile_map.set_cell(0, coords)
