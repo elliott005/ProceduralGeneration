@@ -1,0 +1,25 @@
+[gd_scene load_steps=4 format=3 uid="uid://b0yxxljan1sfy"]
+
+[ext_resource type="PackedScene" uid="uid://buun6navxsdio" path="res://scenes/actors/player.tscn" id="1_8qobm"]
+[ext_resource type="Script" path="res://scripts/world.gd" id="1_f56qc"]
+[ext_resource type="TileSet" uid="uid://c8jed63hh5yle" path="res://resources/example_map.tres" id="3_pw5ob"]
+
+[node name="World" type="Node2D"]
+script = ExtResource("1_f56qc")
+
+[node name="Player" parent="." instance=ExtResource("1_8qobm")]
+position = Vector2(520, 258)
+
+[node name="TileMap" type="TileMap" parent="."]
+scale = Vector2(2, 2)
+tile_set = ExtResource("3_pw5ob")
+format = 2
+
+[node name="CanvasLayer" type="CanvasLayer" parent="."]
+
+[node name="CenterContainer" type="CenterContainer" parent="CanvasLayer"]
+offset_right = 40.0
+offset_bottom = 40.0
+
+[node name="Label" type="Label" parent="CanvasLayer/CenterContainer"]
+layout_mode = 2
